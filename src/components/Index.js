@@ -4,7 +4,7 @@ export default class Index extends Component {
     render(){
         return(
             <header className="App-header">
-            <h1>GeNN Service.</h1>
+            <h1>GANN Service.</h1>
             <p>
               Los algoritmos de clasificación supervisada resuelven un tipo de problema específico donde se cuenta con una serie de datos previamente clasificados. Para poder decidir la clasificación de una muestra, se tiene en cuenta toda la información que se pueda extraer de un conjunto de datos inicial, de datos cuya clase es conocida por el clasificador.<br/><br/>
               En este trabajo se implementa una aplicación web que permite al usuario entrenar una red neuronal, cargando un dataset de entrenamiento para ello y devolviéndole la definición de la red entrenada junto con información sobre la fidelidad de esta. Además podrá ingresar opcionalmente un dataset adicional que será procesado y clasificado con la misma red generada.<br/><br/>
