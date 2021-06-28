@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 
-
-export default class Formulario extends Component {
+export default class FormClasificar extends Component {
 
     //Se generan los enlaces para poder tener acceso a los datos que vamos a recoger
     emailRef = React.createRef();
@@ -10,7 +9,6 @@ export default class Formulario extends Component {
     dataset2Ref = React.createRef();
     termsRef = React.createRef();
 
-    
     recibirFormulario = (e) => {
         //Evita que se recargue la página y se envíe el formulario
         e.preventDefault();
@@ -18,11 +16,10 @@ export default class Formulario extends Component {
         var dts1 = this.dataset1Ref.current.value;
         var dts2 = this.dataset2Ref.current.value;
         var terms = this.termsRef.current.value;
-       
-        if(terms) {
-        this.render(email + dts1 + dts2);
-        }
 
+        if (terms) {
+            this.render(email + dts1 + dts2);
+        }
     }
 
     render() {
@@ -54,5 +51,6 @@ export default class Formulario extends Component {
 
             </form>
         );
+
     }
 }
