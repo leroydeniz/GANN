@@ -1,56 +1,45 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-const API_URL = 'https://jsonplaceholder.typicode.com';
+const API_URL = 'https://api.codigodelnorte.com';
 
 export default class ApiConnect extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            params: [],
+            status: null
+        };
+    }
 
-    state = {
-        posts: [],
-        status: null
-    };
-
-    componentWillMount() {
+    componentDidMount() {
         this.getPosts();
     }
 
     getPosts = () => {
-        const url = `${API_URL}/posts`;
+        const url = `${API_URL}/gann`;
         axios.get(url)
             .then(res => {
                 this.setState({
-                    posts: res.data,
+                    params: res.data,
                     status: 'success'
                 });
             });
     }
 
     render() {
-        if (this.state.posts.length >= 1 && this.state.status === 'success') {
+        if (Object.keys(this.state.params).length > 0 && this.state.status === 'success') {
             //Hay elementos y los mostrará
-            var listOfParametres = this.state.posts.map((parameter) => {
-                return (
-                    <React.Fragment>
-                        <p>
-                            UserId: {parameter.userId}<br />
-                            PostId: {parameter.id}<br />
-                            Title: {parameter.title}<br />
-                            Parameter: {parameter.body}<br />
-                        </p>
-                        <hr />
-                    </React.Fragment>
-                );
-            });
-
             return (
+
                 <React.Fragment>
                     <h2>Listado de parámetros.</h2>
-                    {listOfParametres}
+                    <hr />
+                    <ul>
+                        <li key='A001'>  name: {this.state.params.name}</li>
+                        <li key='A002'>  success: {this.state.params.success ? 'true' : 'false'}</li>
+                    </ul>
+                    <hr />
                 </React.Fragment>
-            );
-        } else if (this.state.posts.length === 0 && this.state.status === 'success') {
-            //No hay elementos creados pero la petición se realizó correctamente
-            return (
-                <h2>La consulta no ha devuelto datos.</h2>
             );
         } else {
             //Está cargando
@@ -61,6 +50,6 @@ export default class ApiConnect extends Component {
                 </React.Fragment>
             );
         }
-    }
 
+    }
 }

@@ -23,27 +23,41 @@ export default class FormEntrenar extends Component {
     render() {
         return (
             <React.Fragment>
-                <br /><h2>Entrenar</h2>
-                <p>Para entrenar la red neuronal, ingrese un dataset de train.<br />El resultado será la configuración de una red neuronal óptima y los datos de la bondad del clasificador.</p><br />
-                <form onSubmit={this.recibirFormulario}>
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend">
-                            <span className="input-group-text" id="basic-addon1">@</span>
+                <h1>Entrenar</h1>
+
+                <div className='form-group'>
+                    <p><b>Resultado:</b> configuración de una red neuronal y las métricas de evaluación de ésta.</p>
+                </div>
+
+                <form onSubmit={this.recibirFormulario} id="formServicios">
+                    <p>
+
+                        <div className="input-group mb-3">
+                            Conjunto de datos de entrenamiento:
                         </div>
-                        <input className="form-control" type='email' id='email' name='email' placeholder="Email" aria-label="Email" aria-describedby="basic-addon1" ref={this.emailRef} required />
-                    </div>
 
-                    <div className="input-group mb-3">
-                        <input className="form-control" type='file' id='dataset1' name='dataset1' placeholder="Dataset de train" aria-label="Dataset de train" aria-describedby="basic-addon1" ref={this.dataset1Ref} required />
-                    </div>
+                        <div className="input-group mb-3">
+                            <input className="form-control" type='file' id='dataset1' name='dataset1' placeholder="Dataset de train" aria-label="Dataset de train" aria-describedby="basic-addon1" ref={this.dataset1Ref} required />
+                        </div>
 
-                    <div className='form-group'>
-                    <p><label><input type="checkbox" name="terms" id="terms" value="Acepto" ref={this.termsRef} defaultChecked={true} /> Acepto los términos y condiciones del servicio.</label></p>
-                    </div>
+                        <div className="input-group mb-3">
+                            Email (opcional):
+                        </div>
+                        <div className="input-group mb-3">
+                            <div className="input-group-prepend">
+                                <span className="input-group-text" id="basic-addon1">@</span>
+                            </div>
+                            <input className="form-control" type='email' id='email' name='email' placeholder="Email" aria-label="Email" aria-describedby="basic-addon1" ref={this.emailRef} />
+                        </div>
 
-                    <div className='form-group'>
-                    <input type='submit' className="btn btn-info" value="Entrenar" />
-                    </div>
+                        <div className='form-group'>
+                            <p><label><input type="checkbox" name="terms" id="terms" value="Acepto" ref={this.termsRef} defaultChecked={true} /> Acepto los términos y condiciones del servicio.</label></p>
+                        </div>
+
+                        <div className='form-group'>
+                            <input type='submit' className="btn btn-info" value="Entrenar" />
+                        </div>
+                    </p>
                 </form>
             </React.Fragment>
         );

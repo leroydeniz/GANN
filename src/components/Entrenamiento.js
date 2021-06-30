@@ -25,8 +25,8 @@ export default class Entrenamiento extends Component {
         return (
             <header className="App-header">
                 <h1>Servicios.</h1>
-                    <div id="radio-buttons">
-                        <p>
+                <div id="radio-buttons">
+                    <p>
                         Entrenar
                         <input
                             id="entrenar"
@@ -54,20 +54,19 @@ export default class Entrenamiento extends Component {
                             type="radio"
                             onChange={this.handleChange}
                         />
-                        </p>
-                    </div>
-                    {this.state.opcion=='Entrenar' &&
-                        <FormEntrenar />
-                    }
-                    {this.state.opcion=='Evaluar' &&
-                        <FormEvaluar />
-                    }
-                    {this.state.opcion=='Clasificar' &&
-                        <FormClasificar />
-                    }
-                
-                <hr/>
+                    </p>
 
+                </div>
+
+                {this.state.opcion === 'Entrenar' &&
+                    <FormEntrenar />
+                }
+                {this.state.opcion === 'Evaluar' &&
+                    <FormEvaluar />
+                }
+                {this.state.opcion === 'Clasificar' &&
+                    <FormClasificar />
+                }
             </header>
         );
     }
