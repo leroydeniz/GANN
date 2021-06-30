@@ -39,6 +39,12 @@ export default class ApiConnect extends Component {
                         <li key='A002'>  success: {this.state.params.success ? 'true' : 'false'}</li>
                     </ul>
                     <hr />
+                    <div className='form-group'>
+                    <input type='button' className="btn btn-info buttonExport" value="Exportar CSV" />
+                    <input type='button' className="btn btn-info buttonExport" value="Exportar XML" />
+                    <input type='button' className="btn btn-info buttonExport" value="Exportar JSON" />
+                        </div>
+                    
                 </React.Fragment>
             );
         } else {
