@@ -26,6 +26,12 @@ export default class ApiConnect extends Component {
             });
     }
 
+    json2xml = () => {
+        const json = this.state.params;
+        var xml = JSON.json2xml(json);
+        alert(xml);
+    }
+
     render() {
         if (Object.keys(this.state.params).length > 0 && this.state.status === 'success') {
             //Hay elementos y los mostrará
@@ -34,17 +40,17 @@ export default class ApiConnect extends Component {
                 <React.Fragment>
                     <h2>Listado de parámetros.</h2>
                     <hr />
-                    <ul>
+                    <p>
                         <li key='A001'>  name: {this.state.params.name}</li>
                         <li key='A002'>  success: {this.state.params.success ? 'true' : 'false'}</li>
-                    </ul>
+                    </p>
                     <hr />
                     <div className='form-group'>
-                    <input type='button' className="btn btn-info buttonExport" value="Exportar CSV" />
-                    <input type='button' className="btn btn-info buttonExport" value="Exportar XML" />
-                    <input type='button' className="btn btn-info buttonExport" value="Exportar JSON" />
-                        </div>
-                    
+                        <input type='button' className="btn btn-info buttonExport" value="Exportar CSV" />
+                        <input type='button' className="btn btn-info buttonExport" value="Exportar XML" />
+                        <input type='button' className="btn btn-info buttonExport" value="Exportar JSON" />
+                    </div>
+
                 </React.Fragment>
             );
         } else {
