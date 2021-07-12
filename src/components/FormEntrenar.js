@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios';
-const API_URL = 'https://api.codigodelnorte.com/gann';
+const API_URL = 'https://miescher.csic.edu.uy';
 
 export default class FormEntrenar extends Component {
 
@@ -9,7 +9,7 @@ export default class FormEntrenar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            service: 'entrenar',
+            service: 'train',
             email: null,
             terms: null,
             train: null
@@ -55,7 +55,7 @@ export default class FormEntrenar extends Component {
         
         axios({
             method: "post",
-            url: `${API_URL}/entrenar`,
+            url: `${API_URL}/train`,
             data: formData,
             headers: { "Content-Type": "multipart/form-data" },
           })
