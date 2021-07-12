@@ -101,6 +101,7 @@ export default class FormEvaluar extends Component {
                             type='file'
                             id='train'
                             name='train'
+                            accept=".csv,.onnx"
                             placeholder="Dataset de train"
                             aria-label="Dataset de train"
                             aria-describedby="basic-addon1"
@@ -118,6 +119,7 @@ export default class FormEvaluar extends Component {
                             type='file'
                             id='dataset2'
                             name='dataset2'
+                            accept=".csv"
                             placeholder="Dataset de test"
                             aria-label="Dataset de test"
                             aria-describedby="basic-addon1"

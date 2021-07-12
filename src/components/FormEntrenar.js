@@ -93,6 +93,7 @@ export default class FormEntrenar extends Component {
                             type='file'
                             id='train'
                             name='train'
+                            accept=".csv"
                             placeholder="Dataset de train"
                             aria-label="Dataset de train"
                             aria-describedby="basic-addon1"
