@@ -9,9 +9,9 @@ export default class FormEntrenar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            service: 'train',
             email: null,
-            terms: null,
+            service: 'train',
+            terms: 'Acepto',
             train: null
         }
     }
@@ -22,9 +22,14 @@ export default class FormEntrenar extends Component {
 
     // función que actualiza el contenido del dataset en la variable de estado
     onFileUpload = (event) => {
-        this.setState({ train: event.target.files[0] });
-        console.log(this.state);
+        this.setState({
+            train: event.target.files[0]
+        });
     };
+
+    componentDidUpdate(prevProps, prevState) {
+        console.log(this.state);
+    }
 
     // función que se ejecuta al enviar el formulario
     onFormSubmit = (e) => {
@@ -39,7 +44,7 @@ export default class FormEntrenar extends Component {
         // Crear el objeto de tipo FormData
         var formData = new FormData();
 
-        // Cargar el objeto 
+        // Cargar el objeto
         formData.append(
             'email', this.emailRef.current.value
         );
@@ -47,27 +52,27 @@ export default class FormEntrenar extends Component {
             'servicio', this.state.service
         );
         formData.append(
-            'train', this.state.train, 'train'
+            'train', this.state.train
         );
+
         formData.append(
             'terms', this.termsRef.current.value
         );
-        
+
         axios({
             method: "post",
             url: `${API_URL}/train`,
             data: formData,
-            headers: { "Content-Type": "multipart/form-data" },
-          })
+            headers: { 'content-type': 'multipart/form-data' },
+        })
             .then(function (response) {
-              // todo correcto, hay que mostrar el response en pantalla
-              console.log(response);
+                // todo correcto, hay que mostrar el response en pantalla
+                console.log(response);
             })
             .catch(function (response) {
-              // mostrar código de error
-              console.log(response);
+                // mostrar código de error
+                console.log("ERROR: " + response);
             });
-
     };
 
 
@@ -81,7 +86,6 @@ export default class FormEntrenar extends Component {
                 </div>
 
                 <form onSubmit={this.onFormSubmit} id="formServicios">
-
 
                     <div className="input-group mb-3">
                         <p>Conjunto de datos de entrenamiento:</p>
