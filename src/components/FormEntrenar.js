@@ -63,7 +63,12 @@ export default class FormEntrenar extends Component {
             method: "post",
             url: `${API_URL}/train`,
             data: formData,
-            headers: { 'content-type': 'multipart/form-data' },
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+                'Content-Type': 'multipart/form-data'
+            },
         })
             .then(function (response) {
                 // todo correcto, hay que mostrar el response en pantalla
