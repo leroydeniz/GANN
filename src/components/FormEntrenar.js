@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios';
+import utf8 from 'utf8';
+import iconv from 'iconv-lite';
 const API_URL = 'https://miescher.csic.edu.uy';
 
 export default class FormEntrenar extends Component {
@@ -72,7 +74,14 @@ export default class FormEntrenar extends Component {
         })
             .then(function (response) {
                 // todo correcto, hay que mostrar el response en pantalla
-                console.log(response);
+                var d = utf8.encode(response.data.file)
+                d=iconv.encode(Buffer.from(response.data.file), 'iso-8859-1')
+                var archivo = new Blob([d], { type: 'text/csv' });
+                var csvURL = window.URL.createObjectURL(archivo);
+                var tempLink = document.createElement('a');
+                tempLink.href = csvURL;
+                tempLink.setAttribute('download', 'filename.onnx');
+                tempLink.click();
             })
             .catch(function (response) {
                 // mostrar código de error
