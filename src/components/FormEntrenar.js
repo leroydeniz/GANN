@@ -4,6 +4,7 @@ import axios from 'axios';
 import utf8 from 'utf8';
 import iconv from 'iconv-lite';
 import loading from '../assets/img/lr2.gif';
+import FileTrainSpecs from './FileTrainSpecs';
 const API_URL = 'https://miescher.csic.edu.uy';
 
 export default class FormEntrenar extends Component {
@@ -16,7 +17,7 @@ export default class FormEntrenar extends Component {
             service: 'train',
             terms: 'Acepto',
             train: null,
-            metricas: []
+            extTrain: null
         }
     }
 
@@ -26,9 +27,9 @@ export default class FormEntrenar extends Component {
 
     // función que actualiza el contenido del dataset en la variable de estado
     onFileUpload = (event) => {
-        this.setState({
-            train: event.target.files[0]
-        });
+        this.setState({train: event.target.files[0]});
+        var fileExt = (event.target.files[0].name).split('.').pop();
+        this.setState({extTrain: fileExt})
     };
 
     componentDidUpdate(prevProps, prevState) {
@@ -40,7 +41,7 @@ export default class FormEntrenar extends Component {
 
         // para el flujo de eventos correspondiente al envío
         e.preventDefault();
-
+        
         // Función de cambio de vista
         document.getElementById("div-entrenar").classList.remove('showing');
         document.getElementById("div-entrenar").classList.add('not-showing');
@@ -66,8 +67,20 @@ export default class FormEntrenar extends Component {
         );
 
         formData.append(
-            'terms', this.termsRef.current.value
+            'train_extension', this.state.extTrain
         );
+
+        if (document.getElementById("terms").checked === true) {
+            formData.append(
+                'terms', 'Acepto'
+            );
+        } else {
+            formData.append(
+                'terms', 'No acepto'
+            );
+        }
+
+        
 
         axios({
             method: "post",
@@ -81,33 +94,51 @@ export default class FormEntrenar extends Component {
             },
         })
             .then(function (response) {
-                // todo correcto, hay que mostrar el response en pantalla
 
-                document.getElementById("div-loading").classList.remove('showing');
-                document.getElementById("div-loading").classList.add('not-showing');
-                document.getElementById("div-metricas").classList.remove('not-showing');
-                document.getElementById("div-metricas").classList.add('showing');
+                if ("Error" in response.data) {
 
-                console.log(response);
+                    document.getElementById("div-loading").classList.remove('showing');
+                    document.getElementById("div-loading").classList.add('not-showing');
+                    document.getElementById("div-error").classList.remove('not-showing');
+                    document.getElementById("div-error").classList.add('showing');
 
-                document.getElementById("num_capas").innerHTML=response.data.num_capas;
-                document.getElementById("num_neuronas").innerHTML=response.data.num_neuronas;
-                document.getElementById("accuracy").innerHTML=100-response.data.error.toFixed(2);
-                document.getElementById("avg_loss").innerHTML=response.data.avg_loss.toFixed(2);
-                document.getElementById("error").innerHTML=response.data.error.toFixed(2);
+                    document.getElementById("p-error").innerHTML = response.data.Error;
 
-                var d = utf8.encode(response.data.file);
-                d = iconv.encode(Buffer.from(response.data.file), 'iso-8859-1');
-                var archivo = new Blob([d], { type: 'text/csv' });
-                var csvURL = window.URL.createObjectURL(archivo);
-                var tempLink = document.createElement('a');
-                tempLink.href = csvURL;
-                tempLink.setAttribute('download', 'model.onnx');
-                tempLink.click();
+                } else {
+                    document.getElementById("div-loading").classList.remove('showing');
+                    document.getElementById("div-loading").classList.add('not-showing');
+                    document.getElementById("div-metricas").classList.remove('not-showing');
+                    document.getElementById("div-metricas").classList.add('showing');
+
+                    console.log(response);
+
+                    document.getElementById("num_capas").innerHTML = response.data.num_capas;
+                    document.getElementById("num_neuronas").innerHTML = response.data.num_neuronas;
+                    document.getElementById("accuracy").innerHTML = 100 - response.data.error_perc.toFixed(2);
+                    document.getElementById("avg_loss").innerHTML = response.data.avg_loss.toFixed(2);
+                    document.getElementById("error_perc").innerHTML = response.data.error_perc.toFixed(2);
+
+                    var fileContent = utf8.encode(response.data.file);
+                    fileContent = iconv.encode(Buffer.from(response.data.file), 'iso-8859-1');
+                    var archivo = new Blob([fileContent], { type: 'text/onnx' });
+                    var csvURL = window.URL.createObjectURL(archivo);
+                    var tempLink = document.createElement('a');
+                    tempLink.href = csvURL;
+                    tempLink.setAttribute('download', 'model.onnx');
+                    tempLink.click();
+                }
             })
             .catch(function (response) {
                 // mostrar código de error
                 console.log("ERROR >> " + response);
+
+                document.getElementById("div-loading").classList.remove('showing');
+                document.getElementById("div-loading").classList.add('not-showing');
+                document.getElementById("div-error").classList.remove('not-showing');
+                document.getElementById("div-error").classList.add('showing');
+
+                document.getElementById("p-error").innerHTML = response;
+
             });
     };
 
@@ -116,11 +147,11 @@ export default class FormEntrenar extends Component {
         return (
             <React.Fragment>
                 <header className="App-header">
-                    <h1>Entrenar.</h1>
+                    <h1><b>Entrenar.</b></h1>
                     <div id='div-entrenar' className="showing">
-
                         <div className='form-group'>
                             <p><b>Resultado:</b> configuración de una red neuronal y las métricas de evaluación de ésta.</p>
+                            <FileTrainSpecs/>
                         </div>
 
                         <form onSubmit={this.onFormSubmit} id="formServicios">
@@ -175,7 +206,7 @@ export default class FormEntrenar extends Component {
                                             value="Acepto"
                                             ref={this.termsRef}
                                             defaultChecked={true} />
-                                            Acepto los términos y condiciones del servicio.
+                                        Acepto los términos y condiciones del servicio.
                                     </label>
                                 </p>
                             </div>
@@ -188,18 +219,24 @@ export default class FormEntrenar extends Component {
                     </div>
 
                     <div id='div-loading' className="not-showing">
-                        <img src={loading} alt="loading" id="img-loading"/>
+                        <br /><h2>Entrenando...</h2>
+                        <img src={loading} width="400px;" alt="loading" id="img-loading" />
                     </div>
 
                     <div id='div-metricas' className="not-showing">
-                        <br/><h2>Métricas</h2>
+                        <br /><h2>Métricas</h2>
                         <p>
                             <li key='MET01'>  Número de capas: <span id="num_capas"></span></li>
                             <li key='MET02'>  Número de neuronas: <span id="num_neuronas"></span></li>
                             <li key='MET03'>  Tasa de acierto: <span id="accuracy"></span>%</li>
-                            <li key='MET04'>  Error: <span id="error"></span>%</li>
+                            <li key='MET04'>  Error: <span id="error_perc"></span>%</li>
                             <li key='MET05'>  Media de pérdida: <span id="avg_loss"></span></li>
                         </p>
+                    </div>
+
+                    <div id='div-error' className="not-showing" border="1">
+                        <h2>Error</h2>
+                        <p id="p-error"></p>
                     </div>
 
                 </header>

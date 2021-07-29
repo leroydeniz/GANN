@@ -40,7 +40,7 @@
 }
 
 .App-link {
-  color: #61dafb;
+  color: #3F51B7;
 }
 
 @keyframes App-logo-spin {
@@ -57,7 +57,7 @@
   width: 100%;
   background: white;
   border-bottom: 1px solid #ccc;
-  border-top: 5px solid #61dafb;
+  border-top: 5px solid #3F51B7;
 }
 
 
@@ -143,11 +143,20 @@ a.nav-link {
 }
 
 #menu a:hover{
-  color: #3cb2d3;
+  color: #3F51B7;
 }
 
 input#terms {
   margin-right: 10px;;
+}
+
+#div-error{
+  border-color: white;
+  border: 1px solid white;
+  padding: 20px;
+  margin-top: 30px;
+  min-width: 200px;
+  max-width: 80vw;
 }
 
 .clearfix{
@@ -217,6 +226,16 @@ hr {
 
 .buttonExport {
   margin:10px;
+}
+
+.btn-info{
+  background-color: #3F51B7 !important;
+  border-color: #3F51B7 !important;
+  color: #ffffff !important;
+}
+
+a {
+  color: #3F51B7 !important;
 }
 
 
