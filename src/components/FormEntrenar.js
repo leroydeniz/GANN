@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios';
 import utf8 from 'utf8';
 import iconv from 'iconv-lite';
+import loading from '../assets/img/lr2.gif';
 const API_URL = 'https://miescher.csic.edu.uy';
 
 export default class FormEntrenar extends Component {
@@ -14,7 +15,8 @@ export default class FormEntrenar extends Component {
             email: null,
             service: 'train',
             terms: 'Acepto',
-            train: null
+            train: null,
+            metricas: []
         }
     }
 
@@ -38,6 +40,12 @@ export default class FormEntrenar extends Component {
 
         // para el flujo de eventos correspondiente al envío
         e.preventDefault();
+
+        // Función de cambio de vista
+        document.getElementById("div-entrenar").classList.remove('showing');
+        document.getElementById("div-entrenar").classList.add('not-showing');
+        document.getElementById("div-loading").classList.remove('not-showing');
+        document.getElementById("div-loading").classList.add('showing');
 
         // actualizo las variables de estado con los varlores del formulario
         this.setState({ email: this.emailRef.current.value });
@@ -74,18 +82,32 @@ export default class FormEntrenar extends Component {
         })
             .then(function (response) {
                 // todo correcto, hay que mostrar el response en pantalla
-                var d = utf8.encode(response.data.file)
-                d=iconv.encode(Buffer.from(response.data.file), 'iso-8859-1')
+
+                document.getElementById("div-loading").classList.remove('showing');
+                document.getElementById("div-loading").classList.add('not-showing');
+                document.getElementById("div-metricas").classList.remove('not-showing');
+                document.getElementById("div-metricas").classList.add('showing');
+
+                console.log(response);
+
+                document.getElementById("num_capas").innerHTML=response.data.num_capas;
+                document.getElementById("num_neuronas").innerHTML=response.data.num_neuronas;
+                document.getElementById("accuracy").innerHTML=100-response.data.error.toFixed(2);
+                document.getElementById("avg_loss").innerHTML=response.data.avg_loss.toFixed(2);
+                document.getElementById("error").innerHTML=response.data.error.toFixed(2);
+
+                var d = utf8.encode(response.data.file);
+                d = iconv.encode(Buffer.from(response.data.file), 'iso-8859-1');
                 var archivo = new Blob([d], { type: 'text/csv' });
                 var csvURL = window.URL.createObjectURL(archivo);
                 var tempLink = document.createElement('a');
                 tempLink.href = csvURL;
-                tempLink.setAttribute('download', 'filename.onnx');
+                tempLink.setAttribute('download', 'model.onnx');
                 tempLink.click();
             })
             .catch(function (response) {
                 // mostrar código de error
-                console.log("ERROR: " + response);
+                console.log("ERROR >> " + response);
             });
     };
 
@@ -93,74 +115,94 @@ export default class FormEntrenar extends Component {
     render() {
         return (
             <React.Fragment>
-                <h1>Entrenar</h1>
+                <header className="App-header">
+                    <h1>Entrenar.</h1>
+                    <div id='div-entrenar' className="showing">
 
-                <div className='form-group'>
-                    <p><b>Resultado:</b> configuración de una red neuronal y las métricas de evaluación de ésta.</p>
-                </div>
-
-                <form onSubmit={this.onFormSubmit} id="formServicios">
-
-                    <div className="input-group mb-3">
-                        <p>Conjunto de datos de entrenamiento:</p>
-                    </div>
-
-                    <div className="input-group mb-3">
-                        <input
-                            className="form-control"
-                            type='file'
-                            id='train'
-                            name='train'
-                            accept=".csv"
-                            placeholder="Dataset de train"
-                            aria-label="Dataset de train"
-                            aria-describedby="basic-addon1"
-                            ref={this.trainRef}
-                            onChange={this.onFileUpload}
-                            required />
-                    </div>
-
-                    <div className="input-group mb-3">
-                        <p>Email (opcional):</p>
-                    </div>
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend">
-                            <span
-                                className="input-group-text"
-                                id="basic-addon1">@
-                            </span>
+                        <div className='form-group'>
+                            <p><b>Resultado:</b> configuración de una red neuronal y las métricas de evaluación de ésta.</p>
                         </div>
-                        <input
-                            className="form-control"
-                            type='email'
-                            id='email'
-                            name='email'
-                            placeholder="Email"
-                            aria-label="Email"
-                            aria-describedby="basic-addon1"
-                            ref={this.emailRef} />
+
+                        <form onSubmit={this.onFormSubmit} id="formServicios">
+
+                            <div className="input-group mb-3">
+                                <p>Conjunto de datos de entrenamiento:</p>
+                            </div>
+
+                            <div className="input-group mb-3">
+                                <input
+                                    className="form-control"
+                                    type='file'
+                                    id='train'
+                                    name='train'
+                                    accept=".csv"
+                                    placeholder="Dataset de train"
+                                    aria-label="Dataset de train"
+                                    aria-describedby="basic-addon1"
+                                    ref={this.trainRef}
+                                    onChange={this.onFileUpload}
+                                    required />
+                            </div>
+
+                            <div className="input-group mb-3">
+                                <p>Email (opcional):</p>
+                            </div>
+                            <div className="input-group mb-3">
+                                <div className="input-group-prepend">
+                                    <span
+                                        className="input-group-text"
+                                        id="basic-addon1">@
+                                    </span>
+                                </div>
+                                <input
+                                    className="form-control"
+                                    type='email'
+                                    id='email'
+                                    name='email'
+                                    placeholder="Email"
+                                    aria-label="Email"
+                                    aria-describedby="basic-addon1"
+                                    ref={this.emailRef} />
+                            </div>
+
+                            <div className='form-group'>
+                                <p>
+                                    <label>
+                                        <input
+                                            type="checkbox"
+                                            name="terms"
+                                            id="terms"
+                                            value="Acepto"
+                                            ref={this.termsRef}
+                                            defaultChecked={true} />
+                                        Acepto los términos y condiciones del servicio.
+                                    </label>
+                                </p>
+                            </div>
+
+                            <div className='form-group'>
+                                <input type='submit' className="btn btn-info" value="Entrenar" />
+                            </div>
+
+                        </form>
                     </div>
 
-                    <div className='form-group'>
+                    <div id='div-loading' className="not-showing">
+                        <img src={loading} alt="loading" id="img-loading"/>
+                    </div>
+
+                    <div id='div-metricas' className="not-showing">
+                        <br/><h2>Métricas</h2>
                         <p>
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    name="terms"
-                                    id="terms"
-                                    value="Acepto"
-                                    ref={this.termsRef}
-                                    defaultChecked={true} />
-                                Acepto los términos y condiciones del servicio.
-                            </label>
+                            <li key='MET01'>  Número de capas: <span id="num_capas"></span></li>
+                            <li key='MET02'>  Número de neuronas: <span id="num_neuronas"></span></li>
+                            <li key='MET03'>  Tasa de acierto: <span id="accuracy"></span>%</li>
+                            <li key='MET04'>  Error: <span id="error"></span>%</li>
+                            <li key='MET05'>  Media de pérdida: <span id="avg_loss"></span></li>
                         </p>
                     </div>
 
-                    <div className='form-group'>
-                        <input type='submit' className="btn btn-info" value="Entrenar" />
-                    </div>
-
-                </form>
+                </header>
             </React.Fragment>
         );
 

@@ -62,7 +62,7 @@ export default class FormClasificar extends Component {
         formData.append(
             'terms', this.termsRef.current.value
         );
-        
+
         axios({
             method: "post",
             url: `${API_URL}/classify`,
@@ -83,89 +83,92 @@ export default class FormClasificar extends Component {
     render() {
         return (
             <React.Fragment>
-                <h1>Clasificar</h1>
 
-                <div className='form-group'>
-                    <p><b>Resultado:</b> conjunto de datos clasificado.</p>
-                </div>
+                <header className="App-header">
+                    <h1>Clasificar</h1>
 
-                <form onSubmit={this.onFormSubmit} id="formServicios">
-
-                    <div className="input-group mb-3">
-                        <p>Definición de la red neuronal o conjunto de datos de entrenamiento:</p>
-                    </div>
-                    <div className="input-group mb-3">
-                        <input
-                            className="form-control"
-                            type='file'
-                            id='train'
-                            name='train'
-                            accept=".csv,.onnx"
-                            placeholder="Dataset de train"
-                            aria-label="Dataset de train"
-                            aria-describedby="basic-addon1"
-                            onChange={this.onTrainUpload}
-                            ref={this.trainRef}
-                            required />
+                    <div className='form-group'>
+                        <p><b>Resultado:</b> conjunto de datos clasificado.</p>
                     </div>
 
-                    <div className="input-group mb-3">
-                        <p>Conjunto de datos clasificados:</p>
-                    </div>
-                    <div className="input-group mb-3">
-                        <input
-                            className="form-control"
-                            type='file'
-                            id='dataset2'
-                            name='dataset2'
-                            accept=".csv"
-                            placeholder="Dataset de test"
-                            aria-label="Dataset de test"
-                            aria-describedby="basic-addon1"
-                            onChange={this.onTestUpload}
-                            ref={this.dataset2Ref} />
-                    </div>
+                    <form onSubmit={this.onFormSubmit} id="formServicios">
 
-                    <div className="input-group mb-3">
-                        <p>Email (opcional):</p>
-                    </div>
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend">
-                            <span
-                                className="input-group-text"
-                                id="basic-addon1">@</span>
+                        <div className="input-group mb-3">
+                            <p>Definición de la red neuronal o conjunto de datos de entrenamiento:</p>
                         </div>
-                        <input
-                            className="form-control"
-                            type='email'
-                            id='email'
-                            name='email'
-                            placeholder="Email"
-                            aria-label="Email"
-                            aria-describedby="basic-addon1"
-                            ref={this.emailRef} />
-                    </div>
+                        <div className="input-group mb-3">
+                            <input
+                                className="form-control"
+                                type='file'
+                                id='train'
+                                name='train'
+                                accept=".csv,.onnx"
+                                placeholder="Dataset de train"
+                                aria-label="Dataset de train"
+                                aria-describedby="basic-addon1"
+                                onChange={this.onTrainUpload}
+                                ref={this.trainRef}
+                                required />
+                        </div>
 
-                    <div className='form-group'>
-                        <p>
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    name="terms"
-                                    id="terms"
-                                    value="Acepto"
-                                    ref={this.termsRef}
-                                    defaultChecked={true} />
-                                Acepto los términos y condiciones del servicio.
-                            </label>
-                        </p>
-                    </div>
+                        <div className="input-group mb-3">
+                            <p>Conjunto de datos clasificados:</p>
+                        </div>
+                        <div className="input-group mb-3">
+                            <input
+                                className="form-control"
+                                type='file'
+                                id='dataset2'
+                                name='dataset2'
+                                accept=".csv"
+                                placeholder="Dataset de test"
+                                aria-label="Dataset de test"
+                                aria-describedby="basic-addon1"
+                                onChange={this.onTestUpload}
+                                ref={this.dataset2Ref} />
+                        </div>
 
-                    <div className='form-group'>
-                        <input type='submit' className="btn btn-info" value="Evaluar" />
-                    </div>
+                        <div className="input-group mb-3">
+                            <p>Email (opcional):</p>
+                        </div>
+                        <div className="input-group mb-3">
+                            <div className="input-group-prepend">
+                                <span
+                                    className="input-group-text"
+                                    id="basic-addon1">@</span>
+                            </div>
+                            <input
+                                className="form-control"
+                                type='email'
+                                id='email'
+                                name='email'
+                                placeholder="Email"
+                                aria-label="Email"
+                                aria-describedby="basic-addon1"
+                                ref={this.emailRef} />
+                        </div>
 
-                </form>
+                        <div className='form-group'>
+                            <p>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="terms"
+                                        id="terms"
+                                        value="Acepto"
+                                        ref={this.termsRef}
+                                        defaultChecked={true} />
+                                    Acepto los términos y condiciones del servicio.
+                                </label>
+                            </p>
+                        </div>
+
+                        <div className='form-group'>
+                            <input type='submit' className="btn btn-info" value="Clasificar" />
+                        </div>
+
+                    </form>
+                </header>
             </React.Fragment>
         );
 

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import Entrenamiento from './components/Entrenamiento';
+import FormEntrenar from './components/FormEntrenar';
+import FormEvaluar from './components/FormEvaluar';
+import FormClasificar from './components/FormClasificar';
 import Autor from './components/Autor';
 import Index from './components/Index';
-import Test from './components/Test';
 import Error from './components/Error';
 
 
@@ -17,8 +18,9 @@ class Router extends Component {
                 <Switch>
                     <Route exact path="/" component={Index}/>
                     <Route exact path="/index" component={Index}/>;
-                    <Route exact path="/entrenamiento" component={Entrenamiento}/>;
-                    <Route exact path="/test" component={Test}/>;
+                    <Route exact path="/entrenamiento" component={FormEntrenar}/>;
+                    <Route exact path="/evaluacion" component={FormEvaluar}/>;
+                    <Route exact path="/clasificacion" component={FormClasificar}/>;
                     <Route exact path="/autor" component={Autor}/>;
                     <Route component={Error}/>;
                 </Switch>

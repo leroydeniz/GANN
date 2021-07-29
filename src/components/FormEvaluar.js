@@ -84,6 +84,7 @@ export default class FormEvaluar extends Component {
     render() {
         return (
             <React.Fragment>
+            <header className="App-header">
                 <h1>Evaluar</h1>
 
                 <div className='form-group'>
@@ -167,6 +168,7 @@ export default class FormEvaluar extends Component {
                     </div>
 
                 </form>
+                </header>
             </React.Fragment>
         );
 
