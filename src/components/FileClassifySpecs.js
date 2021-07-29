@@ -36,7 +36,7 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-export default function FileTrainSpecs() {
+export default function FileClassifySpecs() {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -66,22 +66,22 @@ export default function FileTrainSpecs() {
         onClose={handleClose}
       >
         <StyledMenuItem>
-          <ListItemText primary="Archivo en formato CSV" />
+          <ListItemText primary="Archivo en formato CSV u ONNX" />
         </StyledMenuItem>
         <StyledMenuItem>
-          <ListItemText primary="Separado por coma -> ," />
+          <ListItemText primary="Separado por coma -> , (CSV)"/>
         </StyledMenuItem>
         <StyledMenuItem>
-          <ListItemText primary="Mínimo 6 registros" />
+          <ListItemText primary="Mínimo 6 registros (CSV)"  secondary="Sólo CSV Train"/>
         </StyledMenuItem>
         <StyledMenuItem>
-          <ListItemText primary="Máximo 100k registros" />
+          <ListItemText primary="Máximo 100k registros (CSV)" />
         </StyledMenuItem>
         <StyledMenuItem>
-          <ListItemText primary="Tamaño máximo 20MB" />
+          <ListItemText primary="Tamaño máximo 20MB (CSV)" />
         </StyledMenuItem>
         <StyledMenuItem>
-          <ListItemText primary="La última columna es variable de clase" />
+          <ListItemText primary="La última columna es variable de clase (CSV)" secondary="Sólo CSV Train"/>
         </StyledMenuItem>
       </StyledMenu>
     </div>

@@ -4,6 +4,7 @@ import axios from 'axios';
 import utf8 from 'utf8';
 import iconv from 'iconv-lite';
 import loading from '../assets/img/lr2.gif';
+import FileClassifySpecs from './FileClassifySpecs';
 const API_URL = 'https://miescher.csic.edu.uy';
 
 export default class FormClasificar extends Component {
@@ -160,7 +161,7 @@ export default class FormClasificar extends Component {
                         <div className='form-group'>
                             <p><b>Resultado:</b> conjunto de datos clasificado.</p>
                         </div>
-
+                        <FileClassifySpecs/>
                         <form onSubmit={this.onFormSubmit} id="formServicios">
 
                             <div className="input-group mb-3">
