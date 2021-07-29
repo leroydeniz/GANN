@@ -175,7 +175,7 @@ export default class FormEntrenar extends Component {
                                             value="Acepto"
                                             ref={this.termsRef}
                                             defaultChecked={true} />
-                                        Acepto los términos y condiciones del servicio.
+                                            Acepto los términos y condiciones del servicio.
                                     </label>
                                 </p>
                             </div>
