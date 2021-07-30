@@ -56,7 +56,7 @@ export default function FileTestSpecs() {
         color="primary"
         onClick={handleClick}
       >
-        Ver características del archivo
+        Ver características de los archivos
       </Button>
       <StyledMenu
         id="customized-menu"
