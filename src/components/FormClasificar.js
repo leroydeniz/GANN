@@ -16,7 +16,7 @@ export default class FormClasificar extends Component {
         this.state = {
             service: 'classify',
             email: null,
-            terms: null,
+            terms: true,
             train: null,
             test: null,
             extTrain: null,
@@ -42,6 +42,19 @@ export default class FormClasificar extends Component {
         this.setState({ extTest: fileExt })
         console.log(this.state);
     };
+
+    updateTerms  = (event) => {
+        if (document.getElementById("terms").checked === true) {
+            this.setState({terms: false})
+        } else {
+            this.setState({terms: true})
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        console.log(this.state);
+        document.getElementById("enviar").disabled= this.state.terms;
+    }
 
     // función que se ejecuta al enviar el formulario
     onFormSubmit = (e) => {
@@ -229,14 +242,15 @@ export default class FormClasificar extends Component {
                                             id="terms"
                                             value="Acepto"
                                             ref={this.termsRef}
-                                            defaultChecked={true} />
+                                            defaultChecked={true}
+                                            onChange={this.updateTerms}/>
                                         Acepto los términos y condiciones del servicio.
                                     </label>
                                 </p>
                             </div>
 
                             <div className='form-group'>
-                                <input type='submit' className="btn btn-info" value="Clasificar" />
+                                <input id="enviar" type='submit' className="btn btn-info" value="Clasificar" />
                             </div>
 
                         </form>

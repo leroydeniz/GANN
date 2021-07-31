@@ -16,7 +16,7 @@ export default class FormEvaluar extends Component {
         this.state = {
             service: 'test',
             email: null,
-            terms: null,
+            terms: true,
             train: null,
             test: null
         }
@@ -36,6 +36,19 @@ export default class FormEvaluar extends Component {
         this.setState({ test: event.target.files[0] });
         console.log(this.state);
     };
+
+    updateTerms  = (event) => {
+        if (document.getElementById("terms").checked === true) {
+            this.setState({terms: false})
+        } else {
+            this.setState({terms: true})
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        console.log(this.state);
+        document.getElementById("enviar").disabled= this.state.terms;
+    }
 
     // función que se ejecuta al enviar el formulario
     onFormSubmit = (e) => {
@@ -221,14 +234,15 @@ export default class FormEvaluar extends Component {
                                             id="terms"
                                             value="Acepto"
                                             ref={this.termsRef}
-                                            defaultChecked={true} />
+                                            defaultChecked={true}
+                                            onChange={this.updateTerms}/>
                                         Acepto los términos y condiciones del servicio.
                                     </label>
                                 </p>
                             </div>
 
                             <div className='form-group'>
-                                <input type='submit' className="btn btn-info" value="Evaluar" />
+                                <input id="enviar" type='submit' className="btn btn-info" value="Evaluar" />
                             </div>
 
                         </form>

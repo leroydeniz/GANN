@@ -15,7 +15,7 @@ export default class FormEntrenar extends Component {
         this.state = {
             email: null,
             service: 'train',
-            terms: 'Acepto',
+            terms: true,
             train: null,
             extTrain: null
         }
@@ -32,8 +32,17 @@ export default class FormEntrenar extends Component {
         this.setState({extTrain: fileExt})
     };
 
+    updateTerms  = (event) => {
+        if (document.getElementById("terms").checked === true) {
+            this.setState({terms: false})
+        } else {
+            this.setState({terms: true})
+        }
+    }
+
     componentDidUpdate(prevProps, prevState) {
         console.log(this.state);
+        document.getElementById("enviar").disabled= this.state.terms;
     }
 
     // función que se ejecuta al enviar el formulario
@@ -205,14 +214,15 @@ export default class FormEntrenar extends Component {
                                             id="terms"
                                             value="Acepto"
                                             ref={this.termsRef}
-                                            defaultChecked={true} />
+                                            defaultChecked={true} 
+                                            onChange={this.updateTerms}/>
                                         Acepto los términos y condiciones del servicio.
                                     </label>
                                 </p>
                             </div>
 
                             <div className='form-group'>
-                                <input type='submit' className="btn btn-info" value="Entrenar" />
+                                <input id="enviar" type='submit' className="btn btn-info" value="Entrenar" />
                             </div>
 
                         </form>

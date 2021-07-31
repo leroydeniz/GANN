@@ -56,7 +56,7 @@ export default function FileTrainSpecs() {
         color="primary"
         onClick={handleClick}
       >
-        Ver características del archivo
+        Condiciones del CSV
       </Button>
       <StyledMenu
         id="customized-menu"

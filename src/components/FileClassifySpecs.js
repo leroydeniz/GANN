@@ -56,7 +56,7 @@ export default function FileClassifySpecs() {
         color="primary"
         onClick={handleClick}
       >
-        Ver características de los archivos
+        Condiciones del CSV
       </Button>
       <StyledMenu
         id="customized-menu"
@@ -69,19 +69,22 @@ export default function FileClassifySpecs() {
           <ListItemText primary="Archivo en formato CSV u ONNX" />
         </StyledMenuItem>
         <StyledMenuItem>
-          <ListItemText primary="Separado por coma -> , (CSV)"/>
+          <ListItemText primary="Separado por coma -> ,"/>
         </StyledMenuItem>
         <StyledMenuItem>
-          <ListItemText primary="Mínimo 6 registros (CSV)"  secondary="Sólo CSV Train"/>
+          <ListItemText primary="Mínimo 6 registros"  secondary="Sólo CSV Train"/>
         </StyledMenuItem>
         <StyledMenuItem>
-          <ListItemText primary="Máximo 100k registros (CSV)" />
+          <ListItemText primary="Máximo 100k registros" />
         </StyledMenuItem>
         <StyledMenuItem>
-          <ListItemText primary="Tamaño máximo 20MB (CSV)" />
+          <ListItemText primary="Tamaño máximo 20MB" />
         </StyledMenuItem>
         <StyledMenuItem>
-          <ListItemText primary="La última columna es variable de clase (CSV)" secondary="Sólo CSV Train"/>
+          <ListItemText primary="Todas las clases deben tener al menos un registro" />
+        </StyledMenuItem>
+        <StyledMenuItem>
+          <ListItemText primary="La última columna es variable de clase" secondary="Sólo CSV Train"/>
         </StyledMenuItem>
       </StyledMenu>
     </div>
