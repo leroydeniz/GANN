@@ -121,9 +121,6 @@ export default class FormEvaluar extends Component {
         document.getElementById("enviar").disabled = !document.getElementById("terms").checked;
     }
 
-    componentDidUpdate(prevProps, prevState) {
-    }
-
     // función que se ejecuta al enviar el formulario
     onFormSubmit = (e) => {
 
