@@ -7,6 +7,53 @@ import loading from '../assets/img/lr2.gif';
 import FileClassifySpecs from './FileClassifySpecs';
 const API_URL = 'https://miescher.csic.edu.uy';
 
+function sendWithAxios(formData) {
+    axios({
+        method: "post",
+        url: `${API_URL}/classify`,
+        data: formData,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+            "Content-Type": "multipart/form-data"
+        },
+    })
+        .then(function (response) {
+            // todo correcto, hay que mostrar el response en pantalla
+
+            if ("Error" in response.data) {
+                document.getElementById("div-loading").classList.remove('showing');
+                document.getElementById("div-loading").classList.add('not-showing');
+                document.getElementById("div-error").classList.remove('not-showing');
+                document.getElementById("div-error").classList.add('showing');
+
+                document.getElementById("p-error").innerHTML = response.data.Error;
+
+            } else {
+                document.getElementById("div-loading").classList.remove('showing');
+                document.getElementById("div-loading").classList.add('not-showing');
+                document.getElementById("div-metricas").classList.remove('not-showing');
+                document.getElementById("div-metricas").classList.add('showing');
+
+                console.log(response);
+
+                var fileContent = utf8.encode(response.data.file);
+                fileContent = iconv.encode(Buffer.from(response.data.file), 'iso-8859-1');
+                var archivo = new Blob([fileContent], { type: 'text/csv' });
+                var csvURL = window.URL.createObjectURL(archivo);
+                var tempLink = document.createElement('a');
+                tempLink.href = csvURL;
+                tempLink.setAttribute('download', 'clasificado.csv');
+                tempLink.click();
+            }
+        })
+        .catch(function (response) {
+            // mostrar código de error
+            console.log(response);
+        });
+}
+
 export default class FormClasificar extends Component {
 
 
@@ -14,9 +61,9 @@ export default class FormClasificar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            service: 'classify',
             email: null,
-            terms: true,
+            service: 'classify',
+            terms: false,
             train: null,
             test: null,
             extTrain: null,
@@ -28,32 +75,42 @@ export default class FormClasificar extends Component {
     emailRef = React.createRef();
     termsRef = React.createRef();
 
+    readFile = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsBinaryString(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
     // función que actualiza el contenido del dataset en la variable de estado
     onTrainUpload = (event) => {
-        this.setState({ train: event.target.files[0] });
-        var fileExt = (event.target.files[0].name).split('.').pop();
-        this.setState({ extTrain: fileExt })
-        console.log(this.state);
+        try {
+            this.setState({ train: event.target.files[0] });
+            var fileExt = (event.target.files[0].name).split('.').pop();
+            this.setState({ extTrain: fileExt })
+        } catch (e) {
+            console.error("Fichero train eliminado.");
+        }
     };
     // función que actualiza el contenido del dataset en la variable de estado
     onTestUpload = (event) => {
-        this.setState({ test: event.target.files[0] });
-        var fileExt = (event.target.files[0].name).split('.').pop();
-        this.setState({ extTest: fileExt })
-        console.log(this.state);
+        try {
+            this.setState({ test: event.target.files[0] });
+            var fileExt = (event.target.files[0].name).split('.').pop();
+            this.setState({ extTest: fileExt })
+        } catch (e) {
+            console.error("Fichero test eliminado.");
+        }
     };
 
-    updateTerms  = (event) => {
-        if (document.getElementById("terms").checked === true) {
-            this.setState({terms: false})
-        } else {
-            this.setState({terms: true})
-        }
+    updateTerms = (event) => {
+        this.setState({ terms: !(document.getElementById("terms").checked) })
+        document.getElementById("enviar").disabled = !document.getElementById("terms").checked;
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log(this.state);
-        document.getElementById("enviar").disabled= this.state.terms;
     }
 
     // función que se ejecuta al enviar el formulario
@@ -75,17 +132,13 @@ export default class FormClasificar extends Component {
         // Crear el objeto de tipo FormData
         var formData = new FormData();
 
-        // Cargar el objeto 
+        // Cargar el objeto
         formData.append(
             'email', this.emailRef.current.value
         );
 
         formData.append(
             'servicio', this.state.service
-        );
-
-        formData.append(
-            'train', this.state.train, 'train'
         );
 
         formData.append(
@@ -110,57 +163,26 @@ export default class FormClasificar extends Component {
             );
         }
 
-        axios({
-            method: "post",
-            url: `${API_URL}/classify`,
-            data: formData,
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                "Access-Control-Allow-Headers": "Content-Type",
-                "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-                "Content-Type": "multipart/form-data"
-            },
-        })
-            .then(function (response) {
-                // todo correcto, hay que mostrar el response en pantalla
-
-                if ("Error" in response.data) {
-                    document.getElementById("div-loading").classList.remove('showing');
-                    document.getElementById("div-loading").classList.add('not-showing');
-                    document.getElementById("div-error").classList.remove('not-showing');
-                    document.getElementById("div-error").classList.add('showing');
-
-                    document.getElementById("p-error").innerHTML = response.data.Error;
-
-                } else {
-                    document.getElementById("div-loading").classList.remove('showing');
-                    document.getElementById("div-loading").classList.add('not-showing');
-                    document.getElementById("div-metricas").classList.remove('not-showing');
-                    document.getElementById("div-metricas").classList.add('showing');
-
-                    console.log(response);
-
-                    document.getElementById("num_capas").innerHTML = response.data.num_capas;
-                    document.getElementById("num_neuronas").innerHTML = response.data.num_neuronas;
-                    document.getElementById("accuracy").innerHTML = 100 - response.data.error_perc.toFixed(2);
-                    document.getElementById("avg_loss").innerHTML = response.data.avg_loss.toFixed(2);
-                    document.getElementById("error_perc").innerHTML = response.data.error_perc.toFixed(2);
-
-                    var fileContent = utf8.encode(response.data.file);
-                    fileContent = iconv.encode(Buffer.from(response.data.file), 'iso-8859-1');
-                    var archivo = new Blob([fileContent], { type: 'text/csv' });
-                    var csvURL = window.URL.createObjectURL(archivo);
-                    var tempLink = document.createElement('a');
-                    tempLink.href = csvURL;
-                    tempLink.setAttribute('download', 'clasificado.csv');
-                    tempLink.click();
+        if (this.state.extTrain === "onnx") {
+            this.readFile(this.state.train).then(
+                data => {
+                    var decFile = iconv.decode(data, 'ISO-8859-1');
+                    decFile = new File([decFile], {'type': 'text/plain'});
+                    formData.append(
+                        'train', decFile, 'train'
+                    );
+                    sendWithAxios(formData);
                 }
-            })
-            .catch(function (response) {
-                // mostrar código de error
-                console.log(response);
+            ).catch( data => {
+                console.log(data)
             });
-
+        } else {
+            var decFile = this.state.train
+            formData.append(
+                'train', decFile
+            );
+            sendWithAxios(formData);
+        }
     };
 
     render() {
@@ -174,7 +196,7 @@ export default class FormClasificar extends Component {
                         <div className='form-group'>
                             <p><b>Resultado:</b> conjunto de datos clasificado.</p>
                         </div>
-                        <FileClassifySpecs/>
+                        <FileClassifySpecs />
                         <form onSubmit={this.onFormSubmit} id="formServicios">
 
                             <div className="input-group mb-3">
@@ -242,15 +264,15 @@ export default class FormClasificar extends Component {
                                             id="terms"
                                             value="Acepto"
                                             ref={this.termsRef}
-                                            defaultChecked={true}
-                                            onChange={this.updateTerms}/>
+                                            defaultChecked={false}
+                                            onChange={this.updateTerms} />
                                         Acepto los términos y condiciones del servicio.
                                     </label>
                                 </p>
                             </div>
 
                             <div className='form-group'>
-                                <input id="enviar" type='submit' className="btn btn-info" value="Clasificar" />
+                                <input id="enviar" type='submit' className="btn btn-info" disabled={true} value="Clasificar" />
                             </div>
 
                         </form>
@@ -258,7 +280,7 @@ export default class FormClasificar extends Component {
 
                     <div id='div-loading' className="not-showing">
                         <br /><h2>Clasificando...</h2>
-                        <img src={loading} width="400px;" alt="loading" id="img-loading" />
+                        <img src={loading} width="600px;" alt="loading" id="img-loading" />
                     </div>
 
                     <div id='div-metricas' className="not-showing">

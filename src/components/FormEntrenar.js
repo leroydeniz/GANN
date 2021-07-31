@@ -15,7 +15,7 @@ export default class FormEntrenar extends Component {
         this.state = {
             email: null,
             service: 'train',
-            terms: true,
+            terms: false,
             train: null,
             extTrain: null
         }
@@ -27,22 +27,24 @@ export default class FormEntrenar extends Component {
 
     // función que actualiza el contenido del dataset en la variable de estado
     onFileUpload = (event) => {
-        this.setState({train: event.target.files[0]});
-        var fileExt = (event.target.files[0].name).split('.').pop();
-        this.setState({extTrain: fileExt})
+        try {
+            this.setState({ train: event.target.files[0] });
+            var fileExt = (event.target.files[0].name).split('.').pop();
+            this.setState({ extTrain: fileExt })
+            document.getElementById("enviar").disabled = !this.state.terms;
+            console.log(this.state);
+        } catch (e) {
+            console.error("Fichero eliminado.");
+        }
+
     };
 
-    updateTerms  = (event) => {
-        if (document.getElementById("terms").checked === true) {
-            this.setState({terms: false})
-        } else {
-            this.setState({terms: true})
-        }
+    updateTerms = (event) => {
+        this.setState({ terms: !(document.getElementById("terms").checked) })
+        document.getElementById("enviar").disabled = !document.getElementById("terms").checked;
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log(this.state);
-        document.getElementById("enviar").disabled= this.state.terms;
     }
 
     // función que se ejecuta al enviar el formulario
@@ -50,7 +52,7 @@ export default class FormEntrenar extends Component {
 
         // para el flujo de eventos correspondiente al envío
         e.preventDefault();
-        
+
         // Función de cambio de vista
         document.getElementById("div-entrenar").classList.remove('showing');
         document.getElementById("div-entrenar").classList.add('not-showing');
@@ -68,9 +70,11 @@ export default class FormEntrenar extends Component {
         formData.append(
             'email', this.emailRef.current.value
         );
+
         formData.append(
             'servicio', this.state.service
         );
+        
         formData.append(
             'train', this.state.train
         );
@@ -89,7 +93,7 @@ export default class FormEntrenar extends Component {
             );
         }
 
-        
+
 
         axios({
             method: "post",
@@ -160,7 +164,7 @@ export default class FormEntrenar extends Component {
                     <div id='div-entrenar' className="showing">
                         <div className='form-group'>
                             <p><b>Resultado:</b> configuración de una red neuronal y las métricas de evaluación de ésta.</p>
-                            <FileTrainSpecs/>
+                            <FileTrainSpecs />
                         </div>
 
                         <form onSubmit={this.onFormSubmit} id="formServicios">
@@ -214,15 +218,15 @@ export default class FormEntrenar extends Component {
                                             id="terms"
                                             value="Acepto"
                                             ref={this.termsRef}
-                                            defaultChecked={true} 
-                                            onChange={this.updateTerms}/>
+                                            defaultChecked={false}
+                                            onChange={this.updateTerms} />
                                         Acepto los términos y condiciones del servicio.
                                     </label>
                                 </p>
                             </div>
 
                             <div className='form-group'>
-                                <input id="enviar" type='submit' className="btn btn-info" value="Entrenar" />
+                                <input id="enviar" type='submit' disabled={true} className="btn btn-info" value="Entrenar" />
                             </div>
 
                         </form>
@@ -230,7 +234,7 @@ export default class FormEntrenar extends Component {
 
                     <div id='div-loading' className="not-showing">
                         <br /><h2>Entrenando...</h2>
-                        <img src={loading} width="400px;" alt="loading" id="img-loading" />
+                        <img src={loading} width="600px;" alt="loading" id="img-loading" />
                     </div>
 
                     <div id='div-metricas' className="not-showing">
