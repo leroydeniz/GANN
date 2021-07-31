@@ -20,7 +20,7 @@ function sendWithAxios(formData) {
         },
     })
         .then(function (response) {
-            // todo correcto, hay que mostrar el response en pantalla
+            // correcto, hay que mostrar el response en pantalla
 
             if ("Error" in response.data) {
                 document.getElementById("div-loading").classList.remove('showing');
@@ -39,12 +39,9 @@ function sendWithAxios(formData) {
                 console.log(response);
 
                 document.getElementById("accuracy").innerHTML = response.data.accuracy.toFixed(2);
-                document.getElementById("tpr").innerHTML = response.data.tpr.toFixed(2);
-                document.getElementById("tnr").innerHTML = 100 - response.data.tnr.toFixed(2);
                 document.getElementById("precision").innerHTML = response.data.precision.toFixed(2);
                 document.getElementById("recall").innerHTML = response.data.recall.toFixed(2);
                 document.getElementById("fscore").innerHTML = response.data.fscore.toFixed(2);
-                document.getElementById("roc").innerHTML = response.data.roc.toFixed(2);
                 document.getElementById("avg_loss").innerHTML = response.data.avg_loss.toFixed(2);
                 document.getElementById("error_perc").innerHTML = response.data.error_perc.toFixed(2);
 
@@ -174,7 +171,7 @@ export default class FormEvaluar extends Component {
         if (this.state.extTrain === "onnx") {
             this.readFile(this.state.train).then(
                 data => {
-                    var decFile = iconv.decode(data, 'ISO-8859-1');
+                    decFile = iconv.decode(data, 'ISO-8859-1');
                     decFile = new File([decFile], {'type': 'text/plain'});
                     formData.append(
                         'train', decFile, 'train'
@@ -297,12 +294,9 @@ export default class FormEvaluar extends Component {
                         <br /><h2>Métricas</h2>
                         <p>
                             <li key='MET01'>  Accuracy: <span id="accuracy"></span></li>
-                            <li key='MET02'>  True Positive Rate: <span id="tpr"></span></li>
-                            <li key='MET03'>  True Negative Rate: <span id="tnr"></span></li>
                             <li key='MET04'>  Precision: <span id="precision"></span></li>
                             <li key='MET05'>  Recall: <span id="recall"></span></li>
                             <li key='MET06'>  F1-score: <span id="fscore"></span></li>
-                            <li key='MET07'>  Área ROC: <span id="roc"></span></li>
                             <li key='MET08'>  Media pérdida: <span id="avg_loss"></span></li>
                             <li key='MET09'>  Porcentaje error: <span id="error_perc"></span></li>
                         </p>

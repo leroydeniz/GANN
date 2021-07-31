@@ -8,7 +8,7 @@
 }
 
 .App p {
-  font-size: 20px;;
+  font-size: 20px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -147,7 +147,7 @@ a.nav-link {
 }
 
 input#terms {
-  margin-right: 10px;;
+  margin-right: 10px;
 }
 
 #div-error{

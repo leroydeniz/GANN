@@ -20,7 +20,7 @@ function sendWithAxios(formData) {
         },
     })
         .then(function (response) {
-            // todo correcto, hay que mostrar el response en pantalla
+            // correcto, hay que mostrar el response en pantalla
 
             if ("Error" in response.data) {
                 document.getElementById("div-loading").classList.remove('showing');
