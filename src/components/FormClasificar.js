@@ -61,7 +61,7 @@ export default class FormClasificar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: null,
+            //email: null,
             service: 'classify',
             terms: false,
             train: null,
@@ -72,7 +72,7 @@ export default class FormClasificar extends Component {
     }
 
     // referencias a los campos del formulario
-    emailRef = React.createRef();
+    //emailRef = React.createRef();
     termsRef = React.createRef();
 
     readFile = (file) => {
@@ -124,16 +124,16 @@ export default class FormClasificar extends Component {
         document.getElementById("div-loading").classList.add('showing');
 
         // actualizo las variables de estado con los valores del formulario
-        this.setState({ email: this.emailRef.current.value });
+        //this.setState({ email: this.emailRef.current.value });
         this.setState({ terms: this.termsRef.current.value });
 
         // Crear el objeto de tipo FormData
         var formData = new FormData();
 
-        // Cargar el objeto
+        /* Cargar el objeto
         formData.append(
             'email', this.emailRef.current.value
-        );
+        );*/
 
         formData.append(
             'servicio', this.state.service
@@ -232,7 +232,7 @@ export default class FormClasificar extends Component {
                                     ref={this.dataset2Ref}
                                     required />
                             </div>
-
+{/*
                             <div className="input-group mb-3">
                                 <p>Email (opcional):</p>
                             </div>
@@ -252,7 +252,7 @@ export default class FormClasificar extends Component {
                                     aria-describedby="basic-addon1"
                                     ref={this.emailRef} />
                             </div>
-
+*/}
                             <div className='form-group'>
                                 <p>
                                     <label>
@@ -264,7 +264,7 @@ export default class FormClasificar extends Component {
                                             ref={this.termsRef}
                                             defaultChecked={false}
                                             onChange={this.updateTerms} />
-                                        Acepto los términos y condiciones del servicio.
+                                        Entiendo que el uso de esta aplicación es experimental.
                                     </label>
                                 </p>
                             </div>
@@ -277,7 +277,7 @@ export default class FormClasificar extends Component {
                     </div>
 
                     <div id='div-loading' className="not-showing">
-                        <br /><h2>Clasificando...</h2>
+                        <br /><h2>La aplicación está procesando.<br/>Esto puede demorar un rato...</h2>
                         <img src={loading} width="600px;" alt="loading" id="img-loading" />
                     </div>
 

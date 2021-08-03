@@ -38,12 +38,12 @@ function sendWithAxios(formData) {
 
                 console.log(response);
 
+                document.getElementById("total_casos").innerHTML = response.data["trues"].length;
                 document.getElementById("accuracy").innerHTML = response.data.accuracy.toFixed(2);
-                document.getElementById("precision").innerHTML = response.data.precision.toFixed(2);
-                document.getElementById("recall").innerHTML = response.data.recall.toFixed(2);
-                document.getElementById("fscore").innerHTML = response.data.fscore.toFixed(2);
-                document.getElementById("avg_loss").innerHTML = response.data.avg_loss.toFixed(2);
-                document.getElementById("error_perc").innerHTML = response.data.error_perc.toFixed(2);
+                document.getElementById("precision").innerHTML = response.data['macro avg']["f1-score"].toFixed(2);
+                document.getElementById("recall").innerHTML = response.data['macro avg']["recall"].toFixed(2);
+                document.getElementById("fscore").innerHTML = response.data['macro avg']["precision"].toFixed(2);
+                document.getElementById("error_perc").innerHTML = response.data['error score'].toFixed(2);
 
                 var fileContent = utf8.encode(response.data.file);
                 fileContent = iconv.encode(Buffer.from(response.data.file), 'iso-8859-1');
@@ -69,7 +69,7 @@ export default class FormEvaluar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: null,
+            //email: null,
             service: 'test',
             terms: true,
             train: null,
@@ -80,7 +80,7 @@ export default class FormEvaluar extends Component {
     }
 
     // referencias a los campos del formulario
-    emailRef = React.createRef();
+    //emailRef = React.createRef();
     termsRef = React.createRef();
 
     readFile = (file) => {
@@ -131,16 +131,16 @@ export default class FormEvaluar extends Component {
         document.getElementById("div-loading").classList.add('showing');
 
         // actualizo las variables de estado con los varlores del formulario
-        this.setState({ email: this.emailRef.current.value });
+        //this.setState({ email: this.emailRef.current.value });
         this.setState({ terms: this.termsRef.current.value });
 
         // Crear el objeto de tipo FormData
         var formData = new FormData();
 
-        // Cargar el objeto
+        /* Cargar el objeto
         formData.append(
             'email', this.emailRef.current.value
-        );
+        );*/
 
         formData.append(
             'servicio', this.state.service
@@ -242,7 +242,7 @@ export default class FormEvaluar extends Component {
                                     required />
                             </div>
 
-                            <div className="input-group mb-3">
+                            {/*<div className="input-group mb-3">
                                 <p>Email (opcional):</p>
                             </div>
                             <div className="input-group mb-3">
@@ -261,7 +261,7 @@ export default class FormEvaluar extends Component {
                                     aria-describedby="basic-addon1"
                                     ref={this.emailRef} />
                             </div>
-
+*/}
                             <div className='form-group'>
                                 <p>
                                     <label>
@@ -273,7 +273,7 @@ export default class FormEvaluar extends Component {
                                             ref={this.termsRef}
                                             defaultChecked={false}
                                             onChange={this.updateTerms} />
-                                        Acepto los términos y condiciones del servicio.
+                                        Entiendo que el uso de esta aplicación es experimental.
                                     </label>
                                 </p>
                             </div>
@@ -286,19 +286,19 @@ export default class FormEvaluar extends Component {
                     </div>
 
                     <div id='div-loading' className="not-showing">
-                        <br /><h2>Evaluando...</h2>
+                        <br /><h2>La aplicación está procesando.<br/>Esto puede demorar un rato...</h2>
                         <img src={loading} width="600px;" alt="loading" id="img-loading" />
                     </div>
 
                     <div id='div-metricas' className="not-showing">
                         <br /><h2>Métricas</h2>
                         <p>
-                            <li key='MET01'>  Accuracy: <span id="accuracy"></span></li>
-                            <li key='MET04'>  Precision: <span id="precision"></span></li>
-                            <li key='MET05'>  Recall: <span id="recall"></span></li>
-                            <li key='MET06'>  F1-score: <span id="fscore"></span></li>
-                            <li key='MET08'>  Media pérdida: <span id="avg_loss"></span></li>
-                            <li key='MET09'>  Porcentaje error: <span id="error_perc"></span></li>
+                            <li key='MET01'>  Total casos: <span id="total_casos"></span></li>
+                            <li key='MET02'>  Accuracy: <span id="accuracy"></span></li>
+                            <li key='MET03'>  Precision: <span id="precision"></span></li>
+                            <li key='MET04'>  Recall: <span id="recall"></span></li>
+                            <li key='MET05'>  F1-score: <span id="fscore"></span></li>
+                            <li key='MET06'>  Error: <span id="error_perc"></span></li>
                         </p>
                     </div>
 

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios';
 import utf8 from 'utf8';
@@ -13,7 +14,7 @@ export default class FormEntrenar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: null,
+            //email: null,
             service: 'train',
             terms: false,
             train: null,
@@ -22,7 +23,7 @@ export default class FormEntrenar extends Component {
     }
 
     // referencias a los campos del formulario
-    emailRef = React.createRef();
+    //emailRef = React.createRef();
     termsRef = React.createRef();
 
     // función que actualiza el contenido del dataset en la variable de estado
@@ -57,21 +58,21 @@ export default class FormEntrenar extends Component {
         document.getElementById("div-loading").classList.add('showing');
 
         // actualizo las variables de estado con los varlores del formulario
-        this.setState({ email: this.emailRef.current.value });
+        //this.setState({ email: this.emailRef.current.value });
         this.setState({ terms: this.termsRef.current.value });
 
         // Crear el objeto de tipo FormData
         var formData = new FormData();
 
-        // Cargar el objeto
+        /* Cargar el objeto
         formData.append(
             'email', this.emailRef.current.value
-        );
+        );*/
 
         formData.append(
             'servicio', this.state.service
         );
-        
+
         formData.append(
             'train', this.state.train
         );
@@ -184,11 +185,11 @@ export default class FormEntrenar extends Component {
                                     onChange={this.onFileUpload}
                                     required />
                             </div>
-
+                            {/* 
                             <div className="input-group mb-3">
                                 <p>Email (opcional):</p>
                             </div>
-                            <div className="input-group mb-3">
+                           <div className="input-group mb-3">
                                 <div className="input-group-prepend">
                                     <span
                                         className="input-group-text"
@@ -205,6 +206,7 @@ export default class FormEntrenar extends Component {
                                     aria-describedby="basic-addon1"
                                     ref={this.emailRef} />
                             </div>
+        */}
 
                             <div className='form-group'>
                                 <p>
@@ -217,7 +219,7 @@ export default class FormEntrenar extends Component {
                                             ref={this.termsRef}
                                             defaultChecked={false}
                                             onChange={this.updateTerms} />
-                                        Acepto los términos y condiciones del servicio.
+                                        Entiendo que el uso de esta aplicación es experimental.
                                     </label>
                                 </p>
                             </div>
@@ -230,7 +232,7 @@ export default class FormEntrenar extends Component {
                     </div>
 
                     <div id='div-loading' className="not-showing">
-                        <br /><h2>Entrenando...</h2>
+                        <br /><h2>La aplicación está procesando.<br />Esto puede demorar un rato...</h2>
                         <img src={loading} width="600px;" alt="loading" id="img-loading" />
                     </div>
 
@@ -243,6 +245,12 @@ export default class FormEntrenar extends Component {
                             <li key='MET04'>  Error: <span id="error_perc"></span>%</li>
                             <li key='MET05'>  Media de pérdida: <span id="avg_loss"></span></li>
                         </p>
+                        <div className='form-group'>
+                            <p><br/>Puede visualizar el modelo descargado<br/>utilizando la aplicación Netron.</p>
+                            <a href="https://netron.app" target="_blank" rel="noopener noreferrer">
+                                <input id="netron" type='button' disabled={false} className="btn btn-info" value="Ir a Netron" />
+                            </a>
+                        </div>
                     </div>
 
                     <div id='div-error' className="not-showing" border="1">
